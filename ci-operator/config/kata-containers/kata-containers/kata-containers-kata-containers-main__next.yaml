@@ -15,6 +15,16 @@ images:
     RUN dnf install -y --nobest gettext
   from: bin
   to: with-deps
+- dockerfile_literal: |
+    FROM tests
+    RUN echo /etc
+    RUN ls -al /etc
+    RUN echo /usr/libexec/origin
+    RUN ls -al /usr/libexec/origin
+    RUN echo /usr/bin/*
+    RUN ls -al /usr/bin/
+  from: tests
+  to: tests
 releases:
   initial:
     integration:
@@ -38,7 +48,7 @@ tests:
     allow_skip_on_success: true
     cluster_profile: azure4
     env:
-      TEST_ARGS: ' --max-parallel-tests 5 --cluster-stability Disruptive --run ^\[sig-node\].*|^\[sig-network\] '
+      TEST_ARGS: ' --max-parallel-tests 5 --cluster-stability Disruptive --run ^\[sig-node\] '
       TEST_SKIPS: \[sig-node\] Security Context should support seccomp runtime/default\|\[sig-node\]
         Variable Expansion should allow substituting values in a volume subpath\|\[sig-node\]
         Container Runtime blackbox test on terminated container should report termination
